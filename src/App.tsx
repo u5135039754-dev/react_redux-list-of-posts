@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 import 'bulma/css/bulma.css';
@@ -14,6 +14,10 @@ import { fetchPosts } from './features/posts/postsThrunk';
 import { setAuthor } from './features/author/authorReducer';
 import { User } from './types/User';
 import { useAppDispatch, useAppSelector } from './app/hooks';
+import {
+  setSelectedPost,
+  clearSelectedPost,
+} from './features/selectedPost/selectedPostReducer';
 
 export const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -24,10 +28,12 @@ export const App: React.FC = () => {
   } = useAppSelector(state => state.posts);
   const author = useAppSelector(state => state.author) as User | null;
 
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const selectedPost = useAppSelector(
+    state => state.selectedPost,
+  ) as Post | null;
 
   useEffect(() => {
-    setSelectedPost(null);
+    dispatch(clearSelectedPost(undefined as any));
     if (author?.id) {
       dispatch(fetchPosts(author.id));
     }
@@ -71,7 +77,13 @@ export const App: React.FC = () => {
                   <PostsList
                     posts={posts}
                     selectedPostId={selectedPost?.id}
-                    onPostSelected={setSelectedPost}
+                    onPostSelected={post => {
+                      if (post) {
+                        dispatch(setSelectedPost(post));
+                      } else {
+                        dispatch(clearSelectedPost(undefined as any));
+                      }
+                    }}
                   />
                 )}
               </div>

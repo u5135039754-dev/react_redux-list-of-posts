@@ -6,13 +6,11 @@ type CommentState = {
   items: Comment[];
   loaded: boolean;
   hasError: boolean;
-  visible: boolean;
 };
 const initialState: CommentState = {
   items: [],
   loaded: false,
   hasError: false,
-  visible: false,
 };
 const commentsSlice = createSlice({
   name: 'comments',
@@ -27,15 +25,11 @@ const commentsSlice = createSlice({
       state.hasError = true;
       state.loaded = false;
     },
-    setVisible(state, action: PayloadAction<boolean>) {
-      state.visible = action.payload;
-    },
     setLoaded(state, action: PayloadAction<boolean>) {
       state.loaded = action.payload;
     },
   },
 });
 
-export const { setComments, setError, setVisible, setLoaded } =
-  commentsSlice.actions;
+export const { setComments, setError, setLoaded } = commentsSlice.actions;
 export default commentsSlice.reducer;
