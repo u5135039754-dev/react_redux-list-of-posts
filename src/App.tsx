@@ -33,7 +33,7 @@ export const App: React.FC = () => {
   ) as Post | null;
 
   useEffect(() => {
-    dispatch(clearSelectedPost());
+    dispatch(clearSelectedPost(undefined));
     if (author?.id) {
       dispatch(fetchPosts(author.id));
     }
@@ -81,7 +81,7 @@ export const App: React.FC = () => {
                       if (post) {
                         dispatch(setSelectedPost(post));
                       } else {
-                        dispatch(clearSelectedPost());
+                        dispatch(clearSelectedPost(undefined));
                       }
                     }}
                   />

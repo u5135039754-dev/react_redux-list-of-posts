@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { User } from '../types/User';
-import { useSelector } from 'react-redux';
 import { RootState } from '../app/store';
+import { useAppSelector } from '../app/hooks';
 
 type Props = {
   value: User | null;
@@ -15,7 +15,7 @@ export const UserSelector: React.FC<Props> = ({
   value: selectedUser,
   onChange,
 }) => {
-  const users = useSelector((state: RootState) => state.users.items);
+  const users = useAppSelector((state: RootState) => state.users.items);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {

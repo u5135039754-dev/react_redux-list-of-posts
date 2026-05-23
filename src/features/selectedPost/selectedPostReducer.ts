@@ -9,8 +9,13 @@ const selectedPostSlice = createSlice({
     setSelectedPost(state, action: PayloadAction<Post>) {
       return action.payload;
     },
-    clearSelectedPost() {
-      return null;
+    clearSelectedPost: {
+      reducer() {
+        return null;
+      },
+      prepare() {
+        return { payload: undefined } as const;
+      },
     },
   },
 });
