@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { getUsers } from '../api/users';
-import { User } from '../types/User';
-
-export const UserContext = React.createContext<User[]>([]);
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUsers } from '../features/users/usersSlice';
+import type { AppDispatch, RootState } from '../app/store';
 
 type Props = {
   children: React.ReactNode;
 };
 
 export const UsersProvider: React.FC<Props> = ({ children }) => {
-  const [users, setUsers] = useState<User[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    getUsers().then(setUsers);
-  }, []);
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
-  return <UserContext.Provider value={users}>{children}</UserContext.Provider>;
+  return <>{children}</>;
 };
+
+export const useUsers = () => useSelector((s: RootState) => s.users.items);
