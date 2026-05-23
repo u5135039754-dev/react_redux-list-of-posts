@@ -7,7 +7,11 @@ import * as commentsApi from '../api/comments';
 import { CommentData } from '../types/Comment';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 
-import { setComments, setLoaded, setError } from '../features/comments/commentsReducer';
+import {
+  setComments,
+  setLoaded,
+  setError,
+} from '../features/comments/commentsReducer';
 import { Post } from '../types/Post';
 
 type Props = {
@@ -28,7 +32,7 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
 
     commentsApi
       .getPostComments(post.id)
-      .then(comments => dispatch(setComments(comments))) // save the loaded comments
+      .then(comment => dispatch(setComments(comment))) // save the loaded comments
       .catch(() => dispatch(setError())) // show an error when something went wrong
       .finally(() => dispatch(setLoaded(true))); // hide the spinner
   }
@@ -46,9 +50,7 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
         postId: post.id,
       });
 
-      dispatch(
-        setComments([...comments, newComment]),
-      );
+      dispatch(setComments([...comments, newComment]));
 
       // works wrong if we wrap `addComment` with `useCallback`
       // because it takes the `comments` cached during the first render
@@ -63,9 +65,7 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
     // we delete the comment immediately so as
     // not to make the user wait long for the actual deletion
     // eslint-disable-next-line max-len
-    dispatch(
-      setComments(comments.filter(comment => comment.id !== commentId)),
-    );
+    dispatch(setComments(comments.filter(comment => comment.id !== commentId)));
 
     await commentsApi.deleteComment(commentId);
   };
