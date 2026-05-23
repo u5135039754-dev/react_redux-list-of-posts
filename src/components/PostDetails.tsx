@@ -26,6 +26,7 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
 
   const dispatch = useAppDispatch();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function loadComments() {
     setVisible(false); // local state, not dispatch
     dispatch(setError());
@@ -39,7 +40,7 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
 
   useEffect(() => {
     loadComments();
-  }, [post.id, dispatch]);
+  }, [post.id, dispatch, loadComments]);
 
   const addComment = async ({ name, email, body }: CommentData) => {
     try {
