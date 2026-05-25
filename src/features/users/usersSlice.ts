@@ -15,13 +15,29 @@ const initialState: UsersState = {
   error: null,
 };
 
-export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const resp = await getUsers();
+type AxiosLike<T> = { data: T };
 
-  // `getUsers` may return an Axios-like response or raw data
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (resp as any).data ?? (resp as any) ?? [];
-});
+const isAxiosLike = <T>(resp: unknown): resp is AxiosLike<T> => {
+  return (
+    typeof resp === 'object' &&
+    resp !== null &&
+    'data' in resp &&
+    (resp as AxiosLike<T>).data !== undefined
+  );
+};
+
+export const fetchUsers = createAsyncThunk<User[], void>(
+  'users/fetchUsers',
+  async () => {
+    const resp = await getUsers();
+
+    if (isAxiosLike<User[]>(resp)) {
+      return resp.data ?? [];
+    }
+
+    return Array.isArray(resp) ? resp : [];
+  },
+);
 
 const usersSlice = createSlice({
   name: 'users',

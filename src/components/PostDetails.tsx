@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from './Loader';
 import { NewCommentForm } from './NewCommentForm';
 
@@ -27,16 +27,16 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
   const dispatch = useAppDispatch();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  function loadComments() {
-    setVisible(false); // local state, not dispatch
-    dispatch(setError());
+  const loadComments = useCallback(() => {
+    setVisible(false);
+    dispatch(setError()); // Clear previous errors
 
     commentsApi
       .getPostComments(post.id)
-      .then(comment => dispatch(setComments(comment))) // save the loaded comments
-      .catch(() => dispatch(setError())) // show an error when something went wrong
-      .finally(() => dispatch(setLoaded(true))); // hide the spinner
-  }
+      .then(comment => dispatch(setComments(comment)))
+      .catch(() => dispatch(setError()))
+      .finally(() => dispatch(setLoaded(true)));
+  }, [post.id, dispatch]);
 
   useEffect(() => {
     loadComments();

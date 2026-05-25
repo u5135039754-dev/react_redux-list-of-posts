@@ -25,6 +25,7 @@ const commentsSlice = createSlice({
       state.hasError = true;
       state.loaded = false;
     },
+
     setLoaded(state, action: PayloadAction<boolean>) {
       state.loaded = action.payload;
     },

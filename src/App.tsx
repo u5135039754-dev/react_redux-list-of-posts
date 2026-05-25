@@ -18,6 +18,7 @@ import {
   setSelectedPost,
   clearSelectedPost,
 } from './features/selectedPost/selectedPostReducer';
+import { fetchUsers } from './features/users/usersSlice';
 
 export const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -38,6 +39,10 @@ export const App: React.FC = () => {
       dispatch(fetchPosts(author.id));
     }
   }, [author, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   const handleAuthorChange = (user: User | null) => {
     dispatch(setAuthor(user));
